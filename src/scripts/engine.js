@@ -4,12 +4,15 @@ const state = {
     enemy: document.querySelector('.enemy'),
     timeLeft: document.querySelector('#time-left'),
     score: document.querySelector('#score'),
+    life: document.querySelector('#lives'),
+    retry: document.querySelector('#button'),
   },
   values: {
     gameVelocity: 1000,
     hitPosition: 0,
     result: 0,
     currentTime: 60,
+    life: 3,
   },
 
   actions: {
@@ -18,22 +21,24 @@ const state = {
   },
 };
 
+function toggleButton() {
+  document.getElementById('button').className = 'show';
+}
+
 function countDown() {
   state.values.currentTime--;
   state.view.timeLeft.textContent = state.values.currentTime;
 
-  if (state.values.currentTime <= 0) {
+  if (state.values.currentTime <= 0 || state.values.life <= 0) {
     clearInterval(state.actions.countDownTimerId);
     clearInterval(state.actions.TimerId);
 
-    alert('Game over! O seu resultado foi: ' + state.values.result);
+    alert('GAME OVER! O seu resultado foi: ' + state.values.result);
   }
 }
 
-function playSound() {
-  let audio = new Audio(
-    './src/audios/src/audios/mixkit-cartoon-dazzle-hit-and-birds-746.wav',
-  );
+function playSound(audioName) {
+  let audio = new Audio(`./src/audios/${audioName}.m4a`);
   audio.volume = 0.2;
   audio.play();
 }
@@ -53,6 +58,12 @@ state.values.hitPosition = randomSquare.id;
   state.values.timerId = setInterval(randomSquare, state.values.gameVelocity);
 }*/
 
+function retry() {
+  state.view.retry.addEventListener('click', () => {
+    location.reload();
+  });
+}
+
 function addListenerHitBox() {
   state.view.squares.forEach((square) => {
     square.addEventListener('mousedown', () => {
@@ -61,15 +72,23 @@ function addListenerHitBox() {
         state.view.score.textContent = state.values.result;
         state.values.hitPosition = null;
         playSound();
+      } else if (
+        square.id !== state.values.hitPosition &&
+        state.values.hitPosition !== null
+      ) {
+        if (state.values.life > 0) {
+          playSound('explosion18');
+          state.values.life--;
+          state.view.life.textContent = 'x' + state.values.life;
+        }
       }
     });
   });
 }
 
-function init() {
-  RandomSquare();
-  /*movieEnemy();*/
+function initialize() {
   addListenerHitBox();
+  retry();
 }
 
-init();
+initialize();

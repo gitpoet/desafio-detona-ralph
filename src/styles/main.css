@@ -28,9 +28,10 @@
 .square{
   height: 150px;
   width: 150px;
-  border: 1px solid black;
-  background-color: aquamarine;
-  
+  border: 3px solid rgb(103, 102, 102);
+  background-color: #000000;
+  background-image: url("../images/window.png");
+  background-size: contain
 }
 
 .enemy{
@@ -43,7 +44,28 @@
   align-items: center;
   gap: 10px;
 }
+.menu-lives img {
+  height: 60px;
+}
 
 .menu-time h2:nth-child(2), .menu-score h2:nth-child(2){
-  padding: 1rem;
+  margin-top: 1rem;
+}
+.retry-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.retry-button button {
+  height: 40px;
+  width: 200px;
+}
+
+.hidden {
+  display: none;
+}
+.show {
+ display: inline;
 }
